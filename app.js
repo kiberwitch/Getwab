@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Конфигурация иконок (сохраняем оригинальное расположение)
     const iconsConfig = [
         { // Иконка 1 (слева)
-            iconPath: '/img/ico/icon-2.png',
+            iconPath: './img/ico/icon-2.png',
             text: 'Real-time FPDS data sync',
             position: {
                 angle: 220, // Угол размещения
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         { // Иконка 2 (слева вверху)
-            iconPath: '/img/ico/icon-3.png',
+            iconPath: './img/ico/icon-3.png',
             text: 'Secure & scalable architecture',
             position: {
                 angle: 295,
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         { // Иконка 3 (вверху)
-            iconPath: '/img/ico/icon-4.png',
+            iconPath: './img/ico/icon-4.png',
             text: 'Real-time FPDS data sync',
             position: {
                 angle: 360,
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         { // Иконка 4 (справа вверху)
-            iconPath: '/img/ico/icon.png',
+            iconPath: './img/ico/icon.png',
             text: 'No-code dashboards',
             position: {
                 angle: 430,
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         { // Иконка 5 (справа)
-            iconPath: '/img/ico/icon-1.png',
+            iconPath: './img/ico/icon-1.png',
             text: 'High-speed backend',
             position: {
                 angle: 495,
