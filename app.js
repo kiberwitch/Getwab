@@ -9,13 +9,6 @@ window.addEventListener('scroll', function() {
   }
 });
 
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
   const section = document.getElementById("why-choose-getwab");
   const svg = document.querySelector(".chart");
