@@ -26,20 +26,49 @@ body {
   --DarkGray: #2d2d2d;
 }
 
-/*HEADER START*/
+/*HEADER START + BACKGROUND VIDEO*/
+
+.background-video-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 200px); 
+  z-index: -2;
+}
+
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 200px);
+  background-color: #282828;
+  opacity: 0.7;
+  z-index: -1;
+}
+
 
 .website-header {
   width: 100%;
-  margin-top: 90px;
+  padding-top: 90px;
   padding-bottom: 60px;
   position: relative;
-  overflow: visible;
-  background-color: transparent;
+  background-color: rgba(40, 40, 40, 0.8);
+  backdrop-filter: blur(5px);
 }
 
 .header-container {
   width: 100%;
-  height: 100%;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -102,7 +131,7 @@ body {
 }
 
 .menu-text {
-  color: var(--White);
+  color: white;
   font-size: 24px;
   font-weight: 400;
   line-height: 24px;
@@ -111,7 +140,7 @@ body {
 .menu-arrow {
   width: 16px;
   height: 16px;
-  color: var(--White);
+  color: white;
   transition: transform 0.3s ease;
 }
 
@@ -125,7 +154,7 @@ body {
   left: 0;
   width: 320px;
   padding: 30px 34px;
-  background: var(--Gray);
+  background: #3a3a3a;
   border-radius: 7px;
   flex-direction: column;
   justify-content: flex-start;
@@ -148,17 +177,12 @@ body {
   transition-delay: 0.1s;
 }
 
-.menu-item-wrapper {
-  position: relative;
-  transition-delay: 0.3s;
-}
-
 .dropdown-item {
   width: 100%;
   justify-content: center;
   display: flex;
   flex-direction: column;
-  color: var(--White);
+  color: white;
   font-size: 24px;
   font-weight: 400;
   line-height: 24px;
@@ -172,7 +196,7 @@ body {
 }
 
 .header-login {
-  color: var(--White);
+  color: white;
   font-size: 24px;
   font-weight: 600;
   line-height: 24px;
@@ -202,7 +226,120 @@ body {
   max-width: 1810px;
 }
 
+/*HEADER FINIHS + BACKGROUND VIDEO*/
+
+
+
+/*HERO-SECTION START */
+.hero-section {
+  width: 100%;
+  max-width: 1920px;
+  height: 805px;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 auto;
+  margin-top: 200px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom: #00ad8c solid 1px;
+  position: relative;
+  background-color: transparent;
+}
+
+.hero-content {
+  align-self: stretch;
+  height: 445px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+
+.hero-text-container {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 48px;
+}
+
+.hero-title {
+  text-align: center;
+  color: white;
+  font-size: 96px;
+  font-family: "Overused Grotesk", sans-serif;
+  font-weight: 600;
+  line-height: 96px;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+  text-align: center;
+  color: #afbcb8;
+  font-size: 48px;
+  font-family: "Overused Grotesk", sans-serif;
+  font-weight: 400;
+  line-height: 57.6px;
+  margin: 0;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.hero-button {
+  position: relative;
+  padding: 20px 35px;
+  background: linear-gradient(360deg, #00ad8c 0%, #00755f 51%);
+  border-radius: 7px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  font-size: 24px;
+  font-family: "Overused Grotesk", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  overflow: hidden;
+  z-index: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(360deg, #00624f 0%, #005d4b 97%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+
+.hero-button:hover::before {
+  opacity: 1;
+}
+
+
 @media (max-width: 1400px) {
+  .hero-title {
+    font-size: 72px;
+    line-height: 72px;
+  }
+
+  .hero-subtitle {
+    font-size: 36px;
+    line-height: 43.2px;
+  }
+
   .header-left-menu,
   .header-right-menu {
     gap: 3vw;
@@ -252,7 +389,77 @@ body {
   }
 }
 
-/*HEADER FINISH*/
+@media (max-width: 992px) {
+  .hero-section {
+    height: auto;
+    padding: 60px 30px;
+  }
+
+  .hero-title {
+    font-size: 56px;
+    line-height: 56px;
+  }
+
+  .hero-subtitle {
+    font-size: 28px;
+    line-height: 33.6px;
+  }
+
+  .hero-button {
+    font-size: 20px;
+    padding: 16px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 42px;
+    line-height: 42px;
+  }
+
+  .hero-subtitle {
+    font-size: 22px;
+    line-height: 26.4px;
+  }
+
+  .hero-content {
+    gap: 60px;
+  }
+
+  .hero-text-container {
+    gap: 32px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 40px 20px;
+    margin-top: 150px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .hero-button {
+    font-size: 18px;
+    padding: 14px 24px;
+  }
+
+  .website-header {
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
+}
+/*HERO-SECTION FINISG */
 
 /*HEADER FIXED START*/
 
@@ -335,9 +542,6 @@ body {
   gap: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.fixed-header .menu-item-fixed:hover {
 }
 
 .fixed-header .menu-text {
@@ -483,154 +687,7 @@ body {
 
 /*MAIN START*/
 
-/* Hero Section Styles START */
 
-.hero-section {
-  width: 100%;
-  max-width: 1920px;
-  height: 805px;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 0 auto;
-  margin-top: 200px;
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
-  border-bottom: #00ad8c solid 1px;
-}
-
-.hero-content {
-  align-self: stretch;
-  height: 445px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 80px;
-}
-
-.hero-text-container {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 48px;
-}
-
-.hero-title {
-  text-align: center;
-  color: white;
-  font-size: 96px;
-  font-family: "Overused Grotesk", sans-serif;
-  font-weight: 600;
-  line-height: 96px;
-  margin: 0;
-}
-
-.hero-subtitle {
-  text-align: center;
-  color: #afbcb8;
-  font-size: 48px;
-  font-family: "Overused Grotesk", sans-serif;
-  font-weight: 400;
-  line-height: 57.6px;
-  margin: 0;
-}
-
-.hero-button {
-  position: relative;
-  padding: 20px 35px;
-  background: linear-gradient(360deg, #00ad8c 0%, #00755f 51%);
-  border-radius: 7px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: white;
-  font-size: 24px;
-  font-family: "Overused Grotesk", sans-serif;
-  font-weight: 400;
-  line-height: 24px;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.hero-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(360deg, #00624f 0%, #005d4b 97%);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.4s ease;
-}
-
-.hero-button:hover::before {
-  opacity: 1;
-}
-
-@media (max-width: 1400px) {
-  .hero-title {
-    font-size: 72px;
-    line-height: 72px;
-  }
-
-  .hero-subtitle {
-    font-size: 36px;
-    line-height: 43.2px;
-  }
-}
-
-@media (max-width: 992px) {
-  .hero-section {
-    height: auto;
-    padding: 60px 30px;
-  }
-
-  .hero-title {
-    font-size: 56px;
-    line-height: 56px;
-  }
-
-  .hero-subtitle {
-    font-size: 28px;
-    line-height: 33.6px;
-  }
-
-  .hero-button {
-    font-size: 20px;
-    padding: 16px 28px;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 42px;
-    line-height: 42px;
-  }
-
-  .hero-subtitle {
-    font-size: 22px;
-    line-height: 26.4px;
-  }
-
-  .hero-content {
-    gap: 60px;
-  }
-
-  .hero-text-container {
-    gap: 32px;
-  }
-}
-
-/* Hero Section Styles FINISH */
 
 /* About Section Styles START */
 .about-section {
