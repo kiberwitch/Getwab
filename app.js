@@ -1,11 +1,11 @@
-window.addEventListener('scroll', function() {
-  const fixedHeader = document.querySelector('.fixed-header');
+window.addEventListener("scroll", function () {
+  const fixedHeader = document.querySelector(".fixed-header");
   const scrollPosition = window.scrollY;
 
-  if (scrollPosition > 800) { 
-    fixedHeader.classList.add('active');
+  if (scrollPosition > 800) {
+    fixedHeader.classList.add("active");
   } else {
-    fixedHeader.classList.remove('active');
+    fixedHeader.classList.remove("active");
   }
 });
 
@@ -257,13 +257,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setTimeout(() => {
       iconContainer.style.opacity = "1";
+      iconImg.style.transform = "scale(1)";
       setTimeout(() => {
-        iconImg.style.transform = "scale(1)";
-        setTimeout(() => {
-          textElement.style.opacity = "1";
-        }, 300);
-      }, 200);
-    }, index * 400);
+        textElement.style.opacity = "1";
+      }, 150);
+    }, 0);
   }
 
   const observer = new IntersectionObserver(

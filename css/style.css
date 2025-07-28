@@ -30,21 +30,24 @@ body {
 
 .background-video-container {
   position: relative;
-  width: 100%;
   min-height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-
 
 .background-video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100% + 200px); 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
   z-index: -2;
+  object-fit: cover;
 }
-
 
 .video-overlay {
   position: absolute;
@@ -56,7 +59,6 @@ body {
   opacity: 0.7;
   z-index: -1;
 }
-
 
 .website-header {
   width: 100%;
@@ -112,6 +114,8 @@ body {
 
 .menu-item-wrapper {
   position: relative;
+  padding-bottom: 10px;
+  margin-bottom: -10px;
 }
 
 .menu-item {
@@ -150,7 +154,7 @@ body {
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% - 10px);
   left: 0;
   width: 320px;
   padding: 30px 34px;
@@ -167,6 +171,8 @@ body {
   margin-top: 10px;
   height: auto;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  transition-delay: 600ms;
   pointer-events: none;
 }
 
@@ -174,7 +180,7 @@ body {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition-delay: 0.1s;
+  transition-delay: 0s;
 }
 
 .dropdown-item {
@@ -228,25 +234,20 @@ body {
 
 /*HEADER FINIHS + BACKGROUND VIDEO*/
 
-
-
 /*HERO-SECTION START */
 .hero-section {
   width: 100%;
   max-width: 1920px;
-  height: 805px;
+  min-height: 80vh;
   padding: 60px;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
   margin: 0 auto;
   margin-top: 200px;
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
   border-bottom: #00ad8c solid 1px;
   position: relative;
-  background-color: transparent;
 }
 
 .hero-content {
@@ -323,11 +324,9 @@ body {
   transition: opacity 0.4s ease;
 }
 
-
 .hero-button:hover::before {
   opacity: 1;
 }
-
 
 @media (max-width: 1400px) {
   .hero-title {
@@ -687,8 +686,6 @@ body {
 
 /*MAIN START*/
 
-
-
 /* About Section Styles START */
 .about-section {
   width: 100%;
@@ -806,7 +803,6 @@ body {
   width: 100%;
 }
 
-/* Медиа-запросы для адаптации без изменения структуры */
 @media (max-width: 1800px) {
   .about-text-wrapper {
     gap: 200px;
@@ -1724,6 +1720,13 @@ body {
   line-height: 24px;
   word-wrap: break-word;
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.3s;
+}
+
+.footer-link:hover {
+  text-decoration-color: white;
 }
 
 .footer-divider {
@@ -1772,8 +1775,11 @@ body {
   word-wrap: break-word;
   text-decoration: none;
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.3s;
 }
 
 .footer-legal-link:hover {
-  text-decoration: underline;
+  text-decoration-color: white;
 }
