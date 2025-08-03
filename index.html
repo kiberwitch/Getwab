@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Getwab</title>
 
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/style.css" />
+    
   </head>
 
   <body>
@@ -21,6 +23,11 @@
       <header class="website-header">
         <div class="header-container">
           <nav class="header-left-menu">
+            <div class="burger-menu">
+              <div class="burger-line"></div>
+              <div class="burger-line"></div>
+              <div class="burger-line"></div>
+            </div>
             <div class="menu-item-wrapper">
               <div class="menu-item">
                 <span class="menu-text">Analytics</span>
@@ -96,6 +103,84 @@
         </div>
         <div class="header-bottom-line"></div>
       </header>
+
+      <div class="mobile-menu">
+        <div class="close-mobile-menu">
+          <div class="close-line"></div>
+          <div class="close-line"></div>
+        </div>
+        <div class="mobile-menu-container">
+          <div class="mobile-menu-item">
+            <span>Analytics</span>
+            <img
+              class="mobile-menu-arrow"
+              src="img/ico/arrow.svg"
+              alt="arrow"
+            />
+          </div>
+          <div class="mobile-submenu">
+            <a href="#" class="mobile-submenu-item">Data Analysis Services</a>
+            <a href="#" class="mobile-submenu-item">Automation Solutions</a>
+            <a href="#" class="mobile-submenu-item"
+              >Custom Software Development</a
+            >
+            <a href="#" class="mobile-submenu-item">Order a Report</a>
+          </div>
+
+          <div class="mobile-menu-item">
+            <span>Dashboards</span>
+            <img
+              class="mobile-menu-arrow"
+              src="img/ico/arrow.svg"
+              alt="arrow"
+            />
+          </div>
+          <div class="mobile-submenu">
+            <a href="#" class="mobile-submenu-item">FPDS Dashboards</a>
+            <a href="#" class="mobile-submenu-item"
+              >Government Market Analytics</a
+            >
+            <a href="#" class="mobile-submenu-item">Custom Reports</a>
+            <a href="#" class="mobile-submenu-item">Build Your Dashboard</a>
+          </div>
+
+          <div class="mobile-menu-item">
+            <span>Consulting</span>
+            <img
+              class="mobile-menu-arrow"
+              src="img/ico/arrow.svg"
+              alt="arrow"
+            />
+          </div>
+          <div class="mobile-submenu">
+            <a href="#" class="mobile-submenu-item">Request a Consultation</a>
+            <a href="#" class="mobile-submenu-item">Data Strategy Consulting</a>
+            <a href="#" class="mobile-submenu-item"
+              >Government Contracting Advisory</a
+            >
+            <a href="#" class="mobile-submenu-item"
+              >Custom Solutions Consulting</a
+            >
+          </div>
+
+          <div class="mobile-menu-item">
+            <span>About</span>
+            <img
+              class="mobile-menu-arrow"
+              src="img/ico/arrow.svg"
+              alt="arrow"
+            />
+          </div>
+          <div class="mobile-submenu">
+            <a href="#" class="mobile-submenu-item">Company</a>
+            <a href="#" class="mobile-submenu-item">Capability Statement</a>
+            <a href="#" class="mobile-submenu-item">Mission</a>
+            <a href="#" class="mobile-submenu-item">Contact</a>
+          </div>
+
+          <a href="#" class="mobile-login-item">Log In</a>
+        </div>
+      </div>
 
       <section class="hero-section">
         <div class="hero-content">
@@ -257,7 +342,7 @@
                     with unrestricted access to all fields. Get answers fast —
                     no API limits or delays.
                   </p>
-                  <a href="#" class="product-button">
+                  <a href="#" class="product-button product-button-2">
                     <span class="button-text">Go to Query</span>
                   </a>
                 </div>
@@ -271,23 +356,27 @@
         <div class="services-container">
           <div class="services-content">
             <div class="services-header">
-              <h2 class="services-title">Our Services</h2>
-              <p class="services-description">
-                <img
-                  class="services-description-quotes-1"
-                  src="img/ico/quotes-1.svg"
-                  alt=""
-                />
-                Strategic consulting in analytics, <br />
-                cybersecurity, and automation. <br />
-                For both government and private clients.
-                <img
-                  class="services-description-quotes-2"
-                  src="img/ico/quotes-2.svg"
-                  alt=""
-                />
-              </p>
-              <a href="#" class="services-button">Request Consultation</a>
+              <div class="services-header-left">
+                <h2 class="services-title">Our Services</h2>
+              </div>
+              <div class="services-header-right">
+                <p class="services-description">
+                  <img
+                    class="services-description-quotes-1"
+                    src="img/ico/quotes-1.svg"
+                    alt=""
+                  />
+                  Strategic consulting in analytics, <br />
+                  cybersecurity, and automation. <br />
+                  For both government and private clients.
+                  <img
+                    class="services-description-quotes-2"
+                    src="img/ico/quotes-2.svg"
+                    alt=""
+                  />
+                </p>
+                <a href="#" class="services-button">Request Consultation</a>
+              </div>
             </div>
 
             <div class="services-scroll-container">
@@ -304,7 +393,6 @@
                     <h3 class="service-title">Data Analytics Consulting</h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -319,7 +407,6 @@
                     </h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -332,7 +419,6 @@
                     <h3 class="service-title">Cybersecurity Advisory</h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -347,7 +433,6 @@
                     </h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -360,7 +445,6 @@
                     <h3 class="service-title">Custom Data Solutions</h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -373,7 +457,6 @@
                     <h3 class="service-title">Data Analytics Consulting</h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -388,7 +471,6 @@
                     </h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -401,7 +483,6 @@
                     <h3 class="service-title">Cybersecurity Advisory</h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -416,7 +497,6 @@
                     </h3>
                   </div>
                 </div>
-
                 <div class="service-card">
                   <div class="service-card-content">
                     <div class="service-icon-wrapper">
@@ -431,9 +511,11 @@
                 </div>
               </div>
             </div>
+            <a href="#" class="services-button-mobile">Request Consultation</a>
           </div>
         </div>
       </section>
+
       <section class="clients-section">
         <div class="clients-container">
           <div class="clients-content">
@@ -492,13 +574,23 @@
           </div>
           <h2 class="choose-getwab-heading">Why Choose GETWAB?</h2>
           <div class="choose-getwab-content-wrapper">
-            <div class="choose-getwab-main-content">
-              <div class="chart-container">
-                <svg
-                  class="chart"
-                  viewBox="0 0 100 100"
-                  xmlns="http://www.w3.org/2000/svg"
-                ></svg>
+            <!-- Контейнер для десктопной анимации -->
+            <div class="desktop-animation">
+              <div class="choose-getwab-main-content">
+                <div class="chart-container">
+                  <svg
+                    class="chart"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                  ></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Контейнер для мобильной анимации -->
+            <div class="mobile-animation">
+              <div class="wheel-container" id="wheelContainer">
+                <canvas id="wheel" width="450" height="450"></canvas>
               </div>
             </div>
           </div>
@@ -511,9 +603,7 @@
             <div class="contract-data-text-wrapper">
               <div class="contract-data-title-wrapper">
                 <h2 class="contract-data-title">
-                  Transform how <br />
-                  you work with <br />
-                  contract data.
+                  Transform how you work with contract data.
                 </h2>
               </div>
               <p class="contract-data-description">
@@ -522,9 +612,8 @@
                   src="img/ico/quotes-1.svg"
                   alt=""
                 />
-                Join GETWAB and gain access <br />
-                to smart tools, expert insights, <br />
-                and powerful analytics
+                Join GETWAB and gain access to smart tools, expert insights, and
+                powerful analytics
                 <img
                   class="contract-data-quote-end"
                   src="img/ico/quotes-2.svg"
@@ -533,13 +622,14 @@
               </p>
             </div>
 
+            <div class="contract-data-image-mobile">
+              <img src="img/main/SectionImage3.png" alt="" />
+            </div>
+
             <div class="contract-data-cta">
               <a href="#" class="contract-button">
                 <span class="contract-text">Explore the Platform</span>
               </a>
-            </div>
-            <div>
-              <img src="img/main/SectionImage3.png" alt="" />
             </div>
           </div>
         </div>
