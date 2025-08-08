@@ -64,6 +64,8 @@ window.addEventListener("scroll", function () {
   }
 });
 
+
+
 function isMobileDevice() {
   return window.innerWidth <= 768;
 }
@@ -340,18 +342,31 @@ document.addEventListener("DOMContentLoaded", function () {
   observer.observe(section);
 });
 
+
+
+
+
+
+
+
 function initMobileAnimation() {
+  // Smoothing helper functions
   function lerp(a, b, t) {
     return a + (b - a) * t;
+  }
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
   const canvas = document.getElementById("wheel");
   const ctx = canvas.getContext("2d");
   const wheelContainer = document.getElementById("wheelContainer");
+  const sectorsInfo = document.querySelector('.sectors-info');
 
   const CONFIG = {
     segments: 5,
-    gapAngle: 0.1,
+    gapAngle: 0.05,
     radius: 200,
     innerRadius: 75,
     center: 225,
@@ -360,301 +375,257 @@ function initMobileAnimation() {
     activeAlpha: 0.2,
     scale: {
       active: 1.0,
-      normal: 0.9,
+      normal: 0.92,
     },
-    maxRotationSpeed: (2 * Math.PI) / 14,
+    maxRotationSpeed: (2 * Math.PI) / 16,
     minRotationSpeed: 0,
-    stopDuration: 3000,
-    slowdownDuration: 1000,
-    startupDuration: 1000,
-    widthStretch: 1.1,
+    stopDuration: 3500,
+    slowdownDuration: 1500,
+    startupDuration: 1500,
+    widthStretch: 1.05,
+    transitionDuration: 800,
+    activeRadiusExtend: 15,
+    activeInnerRadiusExtend: 15,
+    highlightAngle: Math.PI, // 180 degrees (bottom)
   };
 
-  const activeRadiusExtend = 15;
-  const activeInnerRadiusExtend = 20;
-
-  const iconsConfig = [
-    { iconPath: "/img/ico/icon-2.png", text: "Real-time FPDS data sync" },
-    { iconPath: "/img/ico/icon-3.png", text: "Secure & scalable architecture" },
-    { iconPath: "/img/ico/icon-4.png", text: "Real-time FPDS data sync" },
-    { iconPath: "/img/ico/icon.png", text: "No-code dashboards" },
-    { iconPath: "/img/ico/icon-1.png", text: "High-speed backend" },
-  ];
-
+  // Pre-calculate segment centers
   const segmentAngle = (2 * Math.PI) / CONFIG.segments;
-  const segmentCenters = Array(CONFIG.segments)
-    .fill(0)
-    .map((_, i) => segmentAngle * i + segmentAngle / 2);
+  const segmentCenters = Array.from({ length: CONFIG.segments }, (_, i) => 
+    segmentAngle * i + segmentAngle / 2
+  );
 
-  function angleDiff(a1, a2) {
-    let diff = Math.abs(a1 - a2);
-    return diff > Math.PI ? 2 * Math.PI - diff : diff;
-  }
-
-  const highlightAngle = Math.PI;
-
+  // State variables
   let state = "rotating";
   let currentRotation = 0;
   let rotationSpeed = CONFIG.maxRotationSpeed;
-  let stopStartTime = null;
   let lastTimestamp = null;
-  let activeIndex = 0;
+  
+  // Active sector tracking with smooth transitions
+  let currentActiveIndex = 0;
+  let targetActiveIndex = 0;
+  let transitionStartTime = 0;
+  let isTransitioning = false;
+  
+  // Sector info display
+  let infoOpacity = 0;
+  let infoFadeState = "hidden";
 
-  let sectorInfoEl = null;
-  let opacity = 0;
-  let showingSector = null;
-  const fadeDuration = 500;
-  let fadeStartTime = null;
-  let fadingIn = false;
-  let fadingOut = false;
-
-  function createSectorInfoElement(iconPath, text) {
-    const container = document.createElement("div");
-    container.className = "sector-info";
-
-    const img = document.createElement("img");
-    img.src = iconPath;
-    img.alt = text;
-    img.className = "sector-icon";
-
-    const textEl = document.createElement("div");
-    textEl.className = "sector-text";
-    textEl.textContent = text;
-
-    container.appendChild(img);
-    container.appendChild(textEl);
-
-    wheelContainer.appendChild(container);
-    return container;
+  // Helper functions
+  function angleDiff(a, b) {
+    const diff = Math.abs(a - b);
+    return Math.min(diff, 2 * Math.PI - diff);
   }
 
-  function updateSectorInfoPosition(rotation, activeIndex) {
-    if (!sectorInfoEl) return;
-
-    const angle = (segmentCenters[activeIndex] + rotation) % (2 * Math.PI);
-    const radiusForIcon = CONFIG.radius + activeRadiusExtend + 30;
-
-    const iconCenterX = CONFIG.center + Math.cos(angle) * radiusForIcon;
-    const iconCenterY = CONFIG.center + Math.sin(angle) * radiusForIcon;
-
-    const iconOffsetX = 200;
-    const iconOffsetY = 25;
-    const textOffsetX = 0;
-    const textOffsetY = 0;
-
-    const containerLeft = iconCenterX - iconOffsetX + textOffsetX;
-    const containerTop = iconCenterY - iconOffsetY + textOffsetY;
-
-    sectorInfoEl.style.left = containerLeft + "px";
-    sectorInfoEl.style.top = containerTop + "px";
-  }
-
-  function removeSectorInfo() {
-    if (sectorInfoEl && wheelContainer.contains(sectorInfoEl)) {
-      wheelContainer.removeChild(sectorInfoEl);
-      sectorInfoEl = null;
-    }
-    opacity = 0;
-    showingSector = null;
-    fadeStartTime = null;
-    fadingIn = false;
-    fadingOut = false;
-  }
-
-  function hexToRgba(hex, alpha) {
-    hex = hex.replace("#", "");
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    return `rgba(${r},${g},${b},${alpha})`;
-  }
-
-  function drawWheel(rotation) {
+  function drawWheel(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let minDist = Infinity;
-    let nearestIndex = 0;
+    
+    // Calculate transition progress
+    const transitionProgress = isTransitioning ? 
+      Math.min(1, (timestamp - transitionStartTime) / CONFIG.transitionDuration) : 0;
+    const easeProgress = easeInOutCubic(transitionProgress);
+    
+    // Draw each segment with smooth transitions
     for (let i = 0; i < CONFIG.segments; i++) {
-      let dist = angleDiff(
-        (segmentCenters[i] + rotation) % (2 * Math.PI),
-        highlightAngle
-      );
-      if (dist < minDist) {
-        minDist = dist;
-        nearestIndex = i;
+      // Calculate active state with smoothing
+      let activeWeight = 0;
+      
+      if (i === currentActiveIndex) {
+        activeWeight = 1 - easeProgress;
+      } else if (i === targetActiveIndex && isTransitioning) {
+        activeWeight = easeProgress;
       }
-    }
-    activeIndex = nearestIndex;
-
-    for (let i = 0; i < CONFIG.segments; i++) {
-      let alpha = i === activeIndex ? CONFIG.activeAlpha : CONFIG.inactiveAlpha;
-      let scale = CONFIG.scale.normal;
-
-      let radius =
-        i === activeIndex ? CONFIG.radius + activeRadiusExtend : CONFIG.radius;
-      let innerRadius =
-        i === activeIndex
-          ? CONFIG.innerRadius + activeInnerRadiusExtend
-          : CONFIG.innerRadius;
-
+      
+      // Calculate visual parameters with smoothing
+      const alpha = lerp(CONFIG.inactiveAlpha, CONFIG.activeAlpha, activeWeight);
+      const scale = lerp(CONFIG.scale.normal, CONFIG.scale.active, activeWeight);
+      const radius = lerp(
+        CONFIG.radius, 
+        CONFIG.radius + CONFIG.activeRadiusExtend, 
+        activeWeight
+      );
+      const innerRadius = lerp(
+        CONFIG.innerRadius, 
+        CONFIG.innerRadius + CONFIG.activeInnerRadiusExtend, 
+        activeWeight
+      );
+      
       ctx.save();
       ctx.translate(CONFIG.center, CONFIG.center);
-
+      
       const segmentMidAngle = segmentAngle * i + segmentAngle / 2;
-      ctx.rotate(segmentMidAngle + rotation);
-
+      ctx.rotate(segmentMidAngle + currentRotation);
       ctx.scale(scale * CONFIG.widthStretch, scale);
-
+      
+      // Draw segment
       ctx.beginPath();
-
       const startAngle = -segmentAngle / 2 + CONFIG.gapAngle / 2;
       const endAngle = segmentAngle / 2 - CONFIG.gapAngle / 2;
-
-      ctx.moveTo(
-        innerRadius * Math.cos(startAngle),
-        innerRadius * Math.sin(startAngle)
-      );
+      
+      ctx.moveTo(innerRadius * Math.cos(startAngle), innerRadius * Math.sin(startAngle));
       ctx.arc(0, 0, radius, startAngle, endAngle, false);
-      ctx.lineTo(
-        innerRadius * Math.cos(endAngle),
-        innerRadius * Math.sin(endAngle)
-      );
+      ctx.lineTo(innerRadius * Math.cos(endAngle), innerRadius * Math.sin(endAngle));
       ctx.arc(0, 0, innerRadius, endAngle, startAngle, true);
       ctx.closePath();
-
-      ctx.fillStyle = hexToRgba(CONFIG.baseColor, alpha);
+      
+      ctx.fillStyle = `rgba(181, 217, 167, ${alpha})`;
       ctx.fill();
-
+      
       ctx.restore();
+    }
+  }
+
+  function updateActiveSector(timestamp) {
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    
+    for (let i = 0; i < CONFIG.segments; i++) {
+      const angle = (segmentCenters[i] + currentRotation) % (2 * Math.PI);
+      const distance = angleDiff(angle, CONFIG.highlightAngle);
+      
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+    
+
+    if (closestIndex !== targetActiveIndex) {
+      if (!isTransitioning) {
+        transitionStartTime = timestamp;
+        isTransitioning = true;
+      }
+      targetActiveIndex = closestIndex;
+    }
+    
+
+    if (isTransitioning && timestamp - transitionStartTime >= CONFIG.transitionDuration) {
+      currentActiveIndex = targetActiveIndex;
+      isTransitioning = false;
+    }
+    
+
+    sectorsInfo.querySelectorAll('.sector-info').forEach((el, i) => {
+      const isActive = i === currentActiveIndex || (isTransitioning && i === targetActiveIndex);
+      el.classList.toggle('active', isActive);
+      el.classList.toggle('inactive', !isActive);
+    });
+  }
+
+  function updateInfoDisplay() {
+
+    switch (state) {
+      case "stopping":
+      case "stopped":
+        if (infoFadeState !== "showing") {
+          infoFadeState = "showing";
+        }
+        infoOpacity = Math.min(1, infoOpacity + 0.02);
+        sectorsInfo.classList.add('visible');
+        sectorsInfo.classList.remove('hidden');
+        break;
+        
+      case "starting":
+      case "rotating":
+        if (infoFadeState !== "hiding") {
+          infoFadeState = "hiding";
+        }
+        infoOpacity = Math.max(0, infoOpacity - 0.02);
+        if (infoOpacity <= 0) {
+          sectorsInfo.classList.remove('visible');
+          sectorsInfo.classList.add('hidden');
+        }
+        break;
     }
   }
 
   function animate(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp;
-    if (!stopStartTime) stopStartTime = timestamp;
-
     const deltaTime = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
+    
 
     switch (state) {
       case "rotating":
-        if (
-          angleDiff(
-            (segmentCenters[activeIndex] + currentRotation) % (2 * Math.PI),
-            highlightAngle
-          ) < 0.08
-        ) {
-          state = "stopping";
-          stopStartTime = timestamp;
-          if (!fadingIn && !opacity) {
-            fadeStartTime = timestamp;
-            fadingIn = true;
-            fadingOut = false;
-          }
-        }
         currentRotation += rotationSpeed * deltaTime;
-        break;
+        
 
+        if (angleDiff(
+          (segmentCenters[targetActiveIndex] + currentRotation) % (2 * Math.PI),
+          CONFIG.highlightAngle
+        ) < 0.05) {
+          state = "stopping";
+        }
+        break;
+        
       case "stopping":
-        const elapsedStop = timestamp - stopStartTime;
-        if (elapsedStop >= CONFIG.slowdownDuration) {
-          rotationSpeed = 0;
+        rotationSpeed = lerp(
+          CONFIG.maxRotationSpeed,
+          CONFIG.minRotationSpeed,
+          Math.min(1, (timestamp - transitionStartTime) / CONFIG.slowdownDuration)
+        );
+        
+        currentRotation += rotationSpeed * deltaTime;
+        
+        if (rotationSpeed <= CONFIG.minRotationSpeed + 0.001) {
           state = "stopped";
-          stopStartTime = timestamp;
-          if (!fadingIn && !opacity) {
-            fadeStartTime = timestamp;
-            fadingIn = true;
-            fadingOut = false;
-          }
-        } else {
-          rotationSpeed = lerp(
-            CONFIG.maxRotationSpeed,
-            CONFIG.minRotationSpeed,
-            elapsedStop / CONFIG.slowdownDuration
-          );
-          currentRotation += rotationSpeed * deltaTime;
+          rotationSpeed = CONFIG.minRotationSpeed;
         }
         break;
-
+        
       case "stopped":
-        const elapsedStopped = timestamp - stopStartTime;
-        if (elapsedStopped >= CONFIG.stopDuration) {
+        if (timestamp - transitionStartTime > CONFIG.stopDuration) {
           state = "starting";
-          stopStartTime = timestamp;
-          if (!fadingOut && opacity) {
-            fadeStartTime = timestamp;
-            fadingOut = true;
-            fadingIn = false;
-          }
+          transitionStartTime = timestamp;
         }
         break;
-
+        
       case "starting":
-        const elapsedStart = timestamp - stopStartTime;
-        if (elapsedStart >= CONFIG.startupDuration) {
-          rotationSpeed = CONFIG.maxRotationSpeed;
+        rotationSpeed = lerp(
+          CONFIG.minRotationSpeed,
+          CONFIG.maxRotationSpeed,
+          Math.min(1, (timestamp - transitionStartTime) / CONFIG.startupDuration)
+        );
+        
+        currentRotation += rotationSpeed * deltaTime;
+        
+        if (rotationSpeed >= CONFIG.maxRotationSpeed - 0.001) {
           state = "rotating";
-          stopStartTime = timestamp;
-          activeIndex = (activeIndex + 1) % CONFIG.segments;
-          if (!fadingOut && opacity) {
-            fadeStartTime = timestamp;
-            fadingOut = true;
-            fadingIn = false;
-          }
-        } else {
-          rotationSpeed = lerp(
-            CONFIG.minRotationSpeed,
-            CONFIG.maxRotationSpeed,
-            elapsedStart / CONFIG.startupDuration
-          );
-          currentRotation += rotationSpeed * deltaTime;
+          rotationSpeed = CONFIG.maxRotationSpeed;
         }
         break;
     }
-
+    
     currentRotation %= 2 * Math.PI;
+    
 
-    if (fadeStartTime !== null) {
-      const fadeElapsed = timestamp - fadeStartTime;
-      let t = Math.min(fadeElapsed / fadeDuration, 1);
-      if (fadingIn) {
-        opacity = lerp(0, 1, t);
-        if (t >= 1) {
-          fadingIn = false;
-          fadeStartTime = null;
-          opacity = 1;
-        }
-      } else if (fadingOut) {
-        opacity = lerp(1, 0, t);
-        if (t >= 1) {
-          fadingOut = false;
-          fadeStartTime = null;
-          opacity = 0;
-          removeSectorInfo();
-        }
-      }
-    }
+    updateActiveSector(timestamp);
+    
 
-    drawWheel(currentRotation);
+    updateInfoDisplay();
+    
 
-    if (opacity > 0) {
-      if (!sectorInfoEl) {
-        const conf = iconsConfig[activeIndex];
-        if (conf) {
-          sectorInfoEl = createSectorInfoElement(conf.iconPath, conf.text);
-          showingSector = activeIndex;
-          sectorInfoEl.style.opacity = "0";
-        }
-      }
-      sectorInfoEl.style.opacity = opacity.toFixed(2);
-      updateSectorInfoPosition(currentRotation, activeIndex);
-    }
-
+    drawWheel(timestamp);
+    
     requestAnimationFrame(animate);
   }
 
+
   requestAnimationFrame(animate);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   if (isMobileDevice()) {
