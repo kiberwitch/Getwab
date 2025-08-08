@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
       position: {
         angle: 220,
         distance: 0.9,
-        textOffsetX: -600,
+        textOffsetX: -450,
         textOffsetY: 0,
         textAlign: "",
         textPosition: "left",
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
       position: {
         angle: 295,
         distance: 1,
-        textOffsetX: -600,
+        textOffsetX: -480,
         textOffsetY: 0,
         textAlign: "center",
         textPosition: "left",
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
       position: {
         angle: 430,
         distance: 1,
-        textOffsetX: 260,
+        textOffsetX: 130,
         textOffsetY: 0,
         textAlign: "left",
         textPosition: "right",
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
       position: {
         angle: 495,
         distance: 1,
-        textOffsetX: 260,
+        textOffsetX: 150,
         textOffsetY: 0,
         textAlign: "left",
         textPosition: "right",
