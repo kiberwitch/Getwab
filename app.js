@@ -386,32 +386,32 @@ function initMobileAnimation() {
     transitionDuration: 800,
     activeRadiusExtend: 15,
     activeInnerRadiusExtend: 15,
-    highlightAngle: Math.PI, // 180 degrees (bottom)
+    highlightAngle: Math.PI, 
   };
 
-  // Pre-calculate segment centers
+
   const segmentAngle = (2 * Math.PI) / CONFIG.segments;
   const segmentCenters = Array.from({ length: CONFIG.segments }, (_, i) => 
     segmentAngle * i + segmentAngle / 2
   );
 
-  // State variables
+
   let state = "rotating";
-  let currentRotation = 0;
+  let currentRotation = 90;
   let rotationSpeed = CONFIG.maxRotationSpeed;
   let lastTimestamp = null;
   
-  // Active sector tracking with smooth transitions
+
   let currentActiveIndex = 0;
   let targetActiveIndex = 0;
   let transitionStartTime = 0;
   let isTransitioning = false;
   
-  // Sector info display
+
   let infoOpacity = 0;
   let infoFadeState = "hidden";
 
-  // Helper functions
+
   function angleDiff(a, b) {
     const diff = Math.abs(a - b);
     return Math.min(diff, 2 * Math.PI - diff);
@@ -420,14 +420,14 @@ function initMobileAnimation() {
   function drawWheel(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Calculate transition progress
+
     const transitionProgress = isTransitioning ? 
       Math.min(1, (timestamp - transitionStartTime) / CONFIG.transitionDuration) : 0;
     const easeProgress = easeInOutCubic(transitionProgress);
     
-    // Draw each segment with smooth transitions
+
     for (let i = 0; i < CONFIG.segments; i++) {
-      // Calculate active state with smoothing
+
       let activeWeight = 0;
       
       if (i === currentActiveIndex) {
@@ -436,7 +436,7 @@ function initMobileAnimation() {
         activeWeight = easeProgress;
       }
       
-      // Calculate visual parameters with smoothing
+
       const alpha = lerp(CONFIG.inactiveAlpha, CONFIG.activeAlpha, activeWeight);
       const scale = lerp(CONFIG.scale.normal, CONFIG.scale.active, activeWeight);
       const radius = lerp(
