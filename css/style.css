@@ -612,7 +612,6 @@ body {
     flex-direction: column;
     gap: 25px;
         align-items: flex-end; 
-    padding-right: 20px; 
   }
 
   .mobile-menu-item {
@@ -831,33 +830,6 @@ body {
   }
 }
 
-@media (max-width: 576px) {
-  .hero-section {
-    padding: 40px 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-  }
-
-  .hero-title {
-    font-size: 32px;
-    line-height: 36px;
-  }
-
-  .hero-subtitle {
-    font-size: 18px;
-    line-height: 22px;
-  }
-
-  .hero-button {
-    font-size: 18px;
-    padding: 14px 24px;
-  }
-
-  .website-header {
-    padding-top: 60px;
-    padding-bottom: 30px;
-  }
-}
 
 @media (max-width: 1400px) {
   .fixed-header .header-left-menu,
@@ -908,6 +880,37 @@ body {
     margin-left: 32px;
   }
 }
+
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 40px 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .hero-button {
+    font-size: 18px;
+    padding: 14px 24px;
+  }
+
+  .website-header {
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
+}
+
+
 
 @media (max-width: 480px) {
   .header-logo {
@@ -962,7 +965,7 @@ body {
 .about-decoration-2 {
   position: absolute;
   bottom: -15px;
-  right: 215px;
+  left: 365px;
 }
 
 .about-content {
@@ -1003,7 +1006,9 @@ body {
 
 .about-description {
   position: relative;
-  width: 300px;
+  width: 100%;
+  max-width: 440px;
+  left: -190px;
   color: #afbcb8;
   flex: 1;
   font-size: 24px;
@@ -1068,20 +1073,25 @@ body {
   }
 
   .about-description {
+    left: -70px;
     font-size: 20px;
   }
+
+  .about-link {
+left: 420px;
 }
-
-.about-link {
-left: 400px;
-}
-
-
 
 .about-decoration-2 {
 
-  right: 190px;
+  left: 310px;
 }
+
+}
+
+
+
+
+
 
 @media (max-width: 1200px) {
   .about-text-wrapper {
@@ -1137,6 +1147,7 @@ left: 400px;
     line-height: 22px;
     padding-left: 0;
     margin-top: 20px;
+    left: 1px;
   }
 
   .about-link {
@@ -1154,7 +1165,7 @@ left: 400px;
   }
 
   .about-decoration-2 {
-    left: 275px;
+    left: 30px;
   }
 
   .about-content > div:last-child {
@@ -1168,6 +1179,19 @@ left: 400px;
   }
 }
 
+@media (max-width: 375px) {
+
+  .about-decoration-2 {
+    left: 275px;
+  }
+}
+
+@media (max-width: 320px) {
+
+  .about-decoration-2 {
+    left: 40px;
+  }
+}
 /* About Section ADAPTION FINISH */
 
 
@@ -1387,6 +1411,11 @@ left: 400px;
     gap: 40px;
   }
 
+    .product-row img,
+  .product-row.reverse img {
+    width: 100%;
+
+  }
   .products-header {
     width: 100%;
     text-align: left;
@@ -2561,7 +2590,7 @@ left: 400px;
 .contract-data-quote-end {
   position: absolute;
   bottom: -15px;
-  right: 300px;
+  right: 60px;
 }
 
 .contract-data-content {
@@ -2601,7 +2630,9 @@ left: 400px;
 
 .contract-data-description {
   position: relative;
-  width: 400px;
+  width: 100%;
+  max-width: 310px;
+  left: -280px;
   color: #afbcb8;
   flex: 1;
   font-size: 24px;
@@ -2697,6 +2728,9 @@ left: 400px;
   }
 
   .contract-data-description {
+    width: 100%;
+    max-width: 300px;
+    left: -170px;
     font-size: 20px;
   }
 
@@ -2705,7 +2739,7 @@ left: 400px;
   }
 
   .contract-data-quote-end {
-right: 170px;  
+right: 130px;  
   }
 }
 
@@ -2810,6 +2844,7 @@ right: 170px;
   }
 
   .contract-data-description {
+    left: 10px;
     font-size: 16px;
   }
 
@@ -2817,11 +2852,14 @@ right: 170px;
     padding: 14px 20px;
     font-size: 16px;
   }
+    .contract-data-quote-end {
+    right: -20px;
+  }
 }
 
 @media (max-width: 375px) {
   .contract-data-quote-end {
-    right: 60px;
+    right: -20px;
   }
 }
 
@@ -3007,7 +3045,6 @@ right: 170px;
   }
 
   .footer-column {
-    width: calc(25% - 30px);
     gap: 30px;
   }
 
