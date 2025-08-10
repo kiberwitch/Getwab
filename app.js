@@ -64,8 +64,6 @@ window.addEventListener("scroll", function () {
   }
 });
 
-
-
 function isMobileDevice() {
   return window.innerWidth <= 768;
 }
@@ -342,15 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
   observer.observe(section);
 });
 
-
-
-
-
-
-
-
 function initMobileAnimation() {
-  // Smoothing helper functions
   function lerp(a, b, t) {
     return a + (b - a) * t;
   }
@@ -362,7 +352,7 @@ function initMobileAnimation() {
   const canvas = document.getElementById("wheel");
   const ctx = canvas.getContext("2d");
   const wheelContainer = document.getElementById("wheelContainer");
-  const sectorsInfo = document.querySelector('.sectors-info');
+  const sectorsInfo = document.querySelector(".sectors-info");
 
   const CONFIG = {
     segments: 5,
@@ -386,31 +376,27 @@ function initMobileAnimation() {
     transitionDuration: 800,
     activeRadiusExtend: 15,
     activeInnerRadiusExtend: 15,
-    highlightAngle: Math.PI, 
+    highlightAngle: Math.PI,
   };
 
-
   const segmentAngle = (2 * Math.PI) / CONFIG.segments;
-  const segmentCenters = Array.from({ length: CONFIG.segments }, (_, i) => 
-    segmentAngle * i + segmentAngle / 2
+  const segmentCenters = Array.from(
+    { length: CONFIG.segments },
+    (_, i) => segmentAngle * i + segmentAngle / 2
   );
-
 
   let state = "rotating";
   let currentRotation = 90;
   let rotationSpeed = CONFIG.maxRotationSpeed;
   let lastTimestamp = null;
-  
 
   let currentActiveIndex = 0;
   let targetActiveIndex = 0;
   let transitionStartTime = 0;
   let isTransitioning = false;
-  
 
   let infoOpacity = 0;
   let infoFadeState = "hidden";
-
 
   function angleDiff(a, b) {
     const diff = Math.abs(a - b);
@@ -419,77 +405,89 @@ function initMobileAnimation() {
 
   function drawWheel(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
 
-    const transitionProgress = isTransitioning ? 
-      Math.min(1, (timestamp - transitionStartTime) / CONFIG.transitionDuration) : 0;
+    const transitionProgress = isTransitioning
+      ? Math.min(
+          1,
+          (timestamp - transitionStartTime) / CONFIG.transitionDuration
+        )
+      : 0;
     const easeProgress = easeInOutCubic(transitionProgress);
-    
 
     for (let i = 0; i < CONFIG.segments; i++) {
-
       let activeWeight = 0;
-      
+
       if (i === currentActiveIndex) {
         activeWeight = 1 - easeProgress;
       } else if (i === targetActiveIndex && isTransitioning) {
         activeWeight = easeProgress;
       }
-      
 
-      const alpha = lerp(CONFIG.inactiveAlpha, CONFIG.activeAlpha, activeWeight);
-      const scale = lerp(CONFIG.scale.normal, CONFIG.scale.active, activeWeight);
+      const alpha = lerp(
+        CONFIG.inactiveAlpha,
+        CONFIG.activeAlpha,
+        activeWeight
+      );
+      const scale = lerp(
+        CONFIG.scale.normal,
+        CONFIG.scale.active,
+        activeWeight
+      );
       const radius = lerp(
-        CONFIG.radius, 
-        CONFIG.radius + CONFIG.activeRadiusExtend, 
+        CONFIG.radius,
+        CONFIG.radius + CONFIG.activeRadiusExtend,
         activeWeight
       );
       const innerRadius = lerp(
-        CONFIG.innerRadius, 
-        CONFIG.innerRadius + CONFIG.activeInnerRadiusExtend, 
+        CONFIG.innerRadius,
+        CONFIG.innerRadius + CONFIG.activeInnerRadiusExtend,
         activeWeight
       );
-      
+
       ctx.save();
       ctx.translate(CONFIG.center, CONFIG.center);
-      
+
       const segmentMidAngle = segmentAngle * i + segmentAngle / 2;
       ctx.rotate(segmentMidAngle + currentRotation);
       ctx.scale(scale * CONFIG.widthStretch, scale);
-      
-      // Draw segment
+
+
       ctx.beginPath();
       const startAngle = -segmentAngle / 2 + CONFIG.gapAngle / 2;
       const endAngle = segmentAngle / 2 - CONFIG.gapAngle / 2;
-      
-      ctx.moveTo(innerRadius * Math.cos(startAngle), innerRadius * Math.sin(startAngle));
+
+      ctx.moveTo(
+        innerRadius * Math.cos(startAngle),
+        innerRadius * Math.sin(startAngle)
+      );
       ctx.arc(0, 0, radius, startAngle, endAngle, false);
-      ctx.lineTo(innerRadius * Math.cos(endAngle), innerRadius * Math.sin(endAngle));
+      ctx.lineTo(
+        innerRadius * Math.cos(endAngle),
+        innerRadius * Math.sin(endAngle)
+      );
       ctx.arc(0, 0, innerRadius, endAngle, startAngle, true);
       ctx.closePath();
-      
+
       ctx.fillStyle = `rgba(181, 217, 167, ${alpha})`;
       ctx.fill();
-      
+
       ctx.restore();
     }
   }
 
   function updateActiveSector(timestamp) {
-
     let closestIndex = 0;
     let minDistance = Infinity;
-    
+
     for (let i = 0; i < CONFIG.segments; i++) {
       const angle = (segmentCenters[i] + currentRotation) % (2 * Math.PI);
       const distance = angleDiff(angle, CONFIG.highlightAngle);
-      
+
       if (distance < minDistance) {
         minDistance = distance;
         closestIndex = i;
       }
     }
-    
 
     if (closestIndex !== targetActiveIndex) {
       if (!isTransitioning) {
@@ -498,23 +496,25 @@ function initMobileAnimation() {
       }
       targetActiveIndex = closestIndex;
     }
-    
 
-    if (isTransitioning && timestamp - transitionStartTime >= CONFIG.transitionDuration) {
+    if (
+      isTransitioning &&
+      timestamp - transitionStartTime >= CONFIG.transitionDuration
+    ) {
       currentActiveIndex = targetActiveIndex;
       isTransitioning = false;
     }
-    
 
-    sectorsInfo.querySelectorAll('.sector-info').forEach((el, i) => {
-      const isActive = i === currentActiveIndex || (isTransitioning && i === targetActiveIndex);
-      el.classList.toggle('active', isActive);
-      el.classList.toggle('inactive', !isActive);
+    sectorsInfo.querySelectorAll(".sector-info").forEach((el, i) => {
+      const isActive =
+        i === currentActiveIndex ||
+        (isTransitioning && i === targetActiveIndex);
+      el.classList.toggle("active", isActive);
+      el.classList.toggle("inactive", !isActive);
     });
   }
 
   function updateInfoDisplay() {
-
     switch (state) {
       case "stopping":
       case "stopped":
@@ -522,10 +522,10 @@ function initMobileAnimation() {
           infoFadeState = "showing";
         }
         infoOpacity = Math.min(1, infoOpacity + 0.02);
-        sectorsInfo.classList.add('visible');
-        sectorsInfo.classList.remove('hidden');
+        sectorsInfo.classList.add("visible");
+        sectorsInfo.classList.remove("hidden");
         break;
-        
+
       case "starting":
       case "rotating":
         if (infoFadeState !== "hiding") {
@@ -533,8 +533,8 @@ function initMobileAnimation() {
         }
         infoOpacity = Math.max(0, infoOpacity - 0.02);
         if (infoOpacity <= 0) {
-          sectorsInfo.classList.remove('visible');
-          sectorsInfo.classList.add('hidden');
+          sectorsInfo.classList.remove("visible");
+          sectorsInfo.classList.add("hidden");
         }
         break;
     }
@@ -544,88 +544,79 @@ function initMobileAnimation() {
     if (!lastTimestamp) lastTimestamp = timestamp;
     const deltaTime = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
-    
 
     switch (state) {
       case "rotating":
         currentRotation += rotationSpeed * deltaTime;
-        
 
-        if (angleDiff(
-          (segmentCenters[targetActiveIndex] + currentRotation) % (2 * Math.PI),
-          CONFIG.highlightAngle
-        ) < 0.05) {
+        if (
+          angleDiff(
+            (segmentCenters[targetActiveIndex] + currentRotation) %
+              (2 * Math.PI),
+            CONFIG.highlightAngle
+          ) < 0.05
+        ) {
           state = "stopping";
         }
         break;
-        
+
       case "stopping":
         rotationSpeed = lerp(
           CONFIG.maxRotationSpeed,
           CONFIG.minRotationSpeed,
-          Math.min(1, (timestamp - transitionStartTime) / CONFIG.slowdownDuration)
+          Math.min(
+            1,
+            (timestamp - transitionStartTime) / CONFIG.slowdownDuration
+          )
         );
-        
+
         currentRotation += rotationSpeed * deltaTime;
-        
+
         if (rotationSpeed <= CONFIG.minRotationSpeed + 0.001) {
           state = "stopped";
           rotationSpeed = CONFIG.minRotationSpeed;
         }
         break;
-        
+
       case "stopped":
         if (timestamp - transitionStartTime > CONFIG.stopDuration) {
           state = "starting";
           transitionStartTime = timestamp;
         }
         break;
-        
+
       case "starting":
         rotationSpeed = lerp(
           CONFIG.minRotationSpeed,
           CONFIG.maxRotationSpeed,
-          Math.min(1, (timestamp - transitionStartTime) / CONFIG.startupDuration)
+          Math.min(
+            1,
+            (timestamp - transitionStartTime) / CONFIG.startupDuration
+          )
         );
-        
+
         currentRotation += rotationSpeed * deltaTime;
-        
+
         if (rotationSpeed >= CONFIG.maxRotationSpeed - 0.001) {
           state = "rotating";
           rotationSpeed = CONFIG.maxRotationSpeed;
         }
         break;
     }
-    
+
     currentRotation %= 2 * Math.PI;
-    
 
     updateActiveSector(timestamp);
-    
 
     updateInfoDisplay();
-    
 
     drawWheel(timestamp);
-    
+
     requestAnimationFrame(animate);
   }
 
-
   requestAnimationFrame(animate);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
   if (isMobileDevice()) {
